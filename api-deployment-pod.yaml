@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myApi
+  template:
+    metadata:
+      labels:
+        app: myApi
+    spec:
+      containers:
+        - name: api-pod
+          image: ighost0321/monologue-spring-boot:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: log-volume
+              mountPath: /var/log  # Replace with the log file location in the container
+      volumes:
+        - name: log-volume
+          persistentVolumeClaim:
+            claimName: app-pvc  # Should match the PVC name created earlier      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-cluster-ip-service
+spec: 
+  type: ClusterIP
+  selector:
+    app: myApi
+  ports:
+    - port: 8080
+      targetPort: 8080
+    

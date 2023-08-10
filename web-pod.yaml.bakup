@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+    - name: web-server
+      image: monologue-nginx:latest
+      ports:
+        - containerPort: 80
